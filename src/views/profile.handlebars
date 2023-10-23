@@ -1,0 +1,22 @@
+<div class="container" style="margin: 90px;">
+   <div class="row">
+      <div class="col-md-4 offset-md-4">
+         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <h1 style="color: white; font-weight: bold;">Bienvenido {{user.name}} {{user.first_name}}</h1>
+            <br>
+            <p style="color: white; font-weight: 400;">Tu correo electrónico es: {{user.email}}</p>
+            <p style="color: white; font-weight: 400;">Tu rol es: {{user.rol}}</p>
+         </div>
+         <br><br>
+         <div class="mb-3">
+            <div class="color1" style="display: flex; flex-direction: column; align-items: center;">
+               <a href="/restore"><button class="btn btn-primary btn-large" >Cambiar Contraseña</button></a>
+            </div>
+         </div>
+         <br>
+         <form action="/api/sessions/logout" method="POST" style="display: flex; flex-direction: column; align-items: center;">
+            <button type="submit" class="btn btn-primary btn-large">Cerrar Sesión</button>
+         </form>
+      </div>
+   </div>
+</div>

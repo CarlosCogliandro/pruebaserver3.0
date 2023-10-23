@@ -1,0 +1,30 @@
+        <section class="product container mt-100 row">
+	<div class="product__photo">
+		<div class="photo-container">
+			<div class="photo-main">
+				<img src={{product.thumbnail}} alt="IMG_PRODUCTO">
+			</div>
+		</div>
+	</div>
+	<div class="product__info">
+		<div class="title">
+			<h1>{{product.title}}</h1>
+			<span>Code: {{product.code}}</span>
+		</div>
+		<div class="price">
+			$ <span>{{product.price}}</span>
+		</div>
+		<div class="description">
+			<h3>FORMAS DE PAGO:</h3>
+			<ul>
+				<li>Pago en efectivo</li>
+				<li>Transferencia bancaria</li>
+				<li>Plataforma PayPal</li>
+				<li>Pago contra reembolso</li>
+			</ul>
+		</div>
+        <button type="button" id="addCart-btn" class="btn btn-primary btn-large" onclick="agregarProductoAlCarrito('{{product._id}}')">Agregar al carrito</button>
+	</div>
+</section> 
+
+<script src="../public/js/cart.js"></script>

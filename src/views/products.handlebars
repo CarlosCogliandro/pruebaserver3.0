@@ -1,0 +1,69 @@
+<div class="container">
+  <div>
+    <div class="container mt-100 row">
+      {{#each products.payload}}
+        <div class="col-md-4 col-sm-6">
+          <div class="card mb-30">
+            <div class="card-img-tiles">
+              <div class="inner">
+                <div class="main-img"><img src={{thumbnail}} alt="" /></div>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <h4 class="card-title">{{title}}</h4>
+              <p class="text-muted">{{description}}</p>
+              <h5 class="text-muted">${{price}}</h5>
+              <a
+                class="btn btn-primary btn-large"
+                href="/products/{{this._id}}"
+                data-abc="true"
+                type="button"
+                id="addCart-btn"
+              >Comprar ahora</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <div class="col">
+      <nav>
+        <ul class="pagination justify-content-center">
+          {{#if products.hasPrevPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{products.prevLink}}"></a>
+            </li>
+          {{/if}}
+          {{#if products.hasPrevPage}}
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{products.prevLink}}"
+              >{{products.prevPage}}</a>
+            </li>
+          {{/if}}
+          <li class="page-item">
+            <a class="page-link">{{products.page}}</a>
+          </li>
+          {{#if products.hasNextPage}}
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{products.nextLink}}"
+              >{{products.nextPage}}</a>
+            </li>
+          {{/if}}
+          {{#if products.hasNextPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{products.nextLink}}">>></a>
+            </li>
+          {{/if}}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script src="../public/js/cart.js"></script>
