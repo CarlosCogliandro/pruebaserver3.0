@@ -28,7 +28,7 @@ class UserService {
     };
   };
 
-  async restorePass(user, hashP) {
+  async restorePassword(user, hashP) {
     const clave = await this.userContainer.restorePassword(user, hashP)
     if (clave) {
       return { status: "success", clave, redirect: "/profile" };

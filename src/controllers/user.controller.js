@@ -26,11 +26,11 @@ class UserController {
   };
 
   async restorePassword(req, res) {
-    const { user, pass } = req.query;
+    const { user, password } = req.query;
     try {
       const passwordRestored = await this.userService.restorePassword(
         user,
-        createHash(pass)
+        createHash(password)
       );
       if (passwordRestored) {
         return res.send({
