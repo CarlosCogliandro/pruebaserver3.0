@@ -1,39 +1,56 @@
 import winston from "winston";
+import config from "../config/config.js";
 
 const customLevelOptions = {
     levels: {
-        error: 0,
-        warning: 1,
-        http: 2,
-        debug: 3
+        fatal: 0,
+        error: 1,
+        warning: 2,
+        info: 3,
+        debug: 4
+    },
+    colors: {
+        fatal: 'red',
+        error: 'orange',
+        warning: 'yellow',
+        info: 'blue',
+        debug: 'white'
     }
 };
 
-const logger = winston.createLogger({
-    levels: customLevelOptions.levels,
+const devLogger = winston.createLogger({
     transports: [
         new winston.transports.Console({
-            level: "info"
-        }),
-        new winston.transports.File({
-            filename: 'src/services/loggers/error.log',
-            level: 'error'
+            level: "info",
+            format: winston.format.combine(
+                winston.format.colorize({ colors: customLevelOptions.colors }),
+                winston.format.simple()
+            )
         }),
         new winston.transports.File({
             filename: 'src/services/loggers/warning.log',
-            level: 'warning'
+            level: 'warning',
+            format: winston.format.simple(),
         })
     ]
-});
+})
 
-export const levels = [
-    winston.info("Info valida..."),
-    logger.warning("Cuidado, Tenemos un problemita..."),
-    logger.error("Un error se ha detectado..."),
-];
+const prodLogger = winston.createLogger({
+    transports: [
+        new winston.transports.Console({ level: 'http' }),
+        new winston.transports.File({
+            filename: 'src/services/loggers/http.log',
+            level: 'warning'
+        }),
+    ]
+})
 
-export const addLoger = (req, res, next) => {
-    req.logger = logger;
-    req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString}`);
+export const addLogger = (req, res, next) => {
+    if (config.environment === 'production') {
+        req.logger = prodLogger
+    } else {
+        req.logger = devLogger
+    }
+    req.logger.info(`Se disparo un llamado ${req.method} en ${req.url} - Fecha y Hora: ${new Date().toLocaleTimeString}`);
     next();
 };

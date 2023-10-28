@@ -1,4 +1,4 @@
-const loginUser = async () => {
+const login = async () => {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
@@ -21,4 +21,4 @@ const loginUser = async () => {
     console.log("Hubo un problema con la operación, usuario o contraseña incorrectos", error);
   }
 };
-document.getElementById("btnLogIn").onclick = loginUser;
+document.getElementById("btnLogIn").onclick = login;

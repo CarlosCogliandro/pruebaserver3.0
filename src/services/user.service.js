@@ -5,15 +5,17 @@ class UserService {
     this.userContainer = new UserContainer();
   }
   
-  async register({ first_name, last_name, email, avatar, age, password, rol }) {
+  async register({ first_name, last_name, email, avatar, age, phone, address, password, rol }) {
     try {
       const rol = email === "adminCoder@coder.com" ? "admin" : "user";
       const user = await this.userContainer.register({
         first_name,
         last_name,
         email,
-        age,
         avatar,
+        age,
+        phone,
+        address,
         password,
         rol,
       });

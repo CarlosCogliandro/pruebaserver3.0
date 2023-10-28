@@ -1,76 +1,155 @@
+<header class="header">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="width: 100%; height: ;">
+        <div class="container-fluid ">
+          <a class="navbar-brand" href="/"><img src="../public//images/tuyen.png" alt="logo" style="height: 50px;"></a>
+          <div class="navbar-collapse">
+            <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;"></ul>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link disable" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/realtimeProducts">Formulario</a>
+              </li>
+          <li class="nav-item">
+                <a class="nav-link active" href="/chat">Chat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/products">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/profile">Perfil</a>
+              </li>
+              {{!-- <li>
+                <button id="cartButton">🛒</button>
+              </li> --}}
+            </ul>
+          </div>
+        </div>
+      </nav>
+  </header>    
     <div class="container">
       <div class="search-bar">
         <form id="search-form"></form>
       </div>
 
-      <div>
-        <div>
-          <p style="color: white; font-weight: 400;">Bienvenido:{{user.name}}{{user.first_name}}!</p>
-        </div>
-        <div class="container mt-100 row">
-          {{#each products.payload}}
-            <div class="col-md-4 col-sm-6">
-              <div class="card mb-30">
-                <div class="card-img-tiles">
-                  <div class="inner">
-                    <div><img src={{thumbnail}} alt="" /></div>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner" style="">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="../public/images/banner1.png" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="../public/images/banner2.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="../public/images/banner3.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<div class="about">
+         <div class="container">
+            <div class="row d_flex">
+               <div class="col-md-5">
+                  <div class="about_img">
+                     <figure><img src="../public/images/front.png" alt="#"/></figure>
                   </div>
-                </div>
-                <div class="card-body text-center">
-                  <h4 class="card-title">{{title}}</h4>
-                  <p class="text-muted">{{description}}</p>
-                  <h5 class="text-muted">${{price}}</h5>
-                  <a
-                    class="btn btn-primary btn-large"
-                    href="/products/{{this._id}}"
-                    data-abc="true"
-                    type="button"
-                    id="addCart-btn"
-                  >Comprar ahora</a>
-                </div>
-              </div>
+               </div>
+               <div class="col-md-7">
+                  <div class="titlepage">
+                     <h2>Sobre nosotros</h2>
+                     <p>En "Tuyen", nuestro compromiso es facilitar la vida de nuestros clientes a través de soluciones en electrodomésticos. Somos una tienda en línea dedicada a ofrecer una amplia gama de productos de alta calidad, desde lavadoras hasta cafeteras, para satisfacer las necesidades de tu hogar.</p>
+                  </div>
+                <a class="read_more btn btn-primary btn-block btn-medium" href="/products">Ver Productos</a>
+               </div>
             </div>
-          {{/each}}
-        </div>
+         </div>
       </div>
 
-      <div class="row my-5">
-        <div class="col">
-          <nav>
-            <ul class="pagination justify-content-center">
-              {{#if products.hasPrevPage}}
-                <li class="page-item">
-                  <a class="page-link" href="{{products.prevLink}}"></a>
-                </li>
-              {{/if}}
-              {{#if products.hasPrevPage}}
-                <li class="page-item">
-                  <a
-                    class="page-link"
-                    href="{{products.prevLink}}"
-                  >{{products.prevPage}}</a>
-                </li>
-              {{/if}}
-              <li class="page-item">
-                <a class="page-link">{{products.page}}</a>
-              </li>
-              {{#if products.hasNextPage}}
-                <li class="page-item">
-                  <a
-                    class="page-link"
-                    href="{{products.nextLink}}"
-                  >{{products.nextPage}}</a>
-                </li>
-              {{/if}}
-              {{#if products.hasNextPage}}
-                <li class="page-item">
-                  <a class="page-link" href="{{products.nextLink}}"></a>
-                </li>
-              {{/if}}
-            </ul>
-          </nav>
-        </div>
+
+
+<!-- clients section -->
+      <div class="clients">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="titlepage">
+                     <h2>Que dicen nuestros clientes!</h2>
+                     <p>A continuacion, te dejamos algunos de los comentarios de nuestros clientes mas especiales...</p>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div id="myCarousel" class="carousel slide clients_Carousel " data-ride="carousel">
+                     <div class="carousel-inner">
+                        <div class="carousel-item active">
+                           <div class="container">
+                              <div class="carousel-caption ">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="clients_box">
+                                          <figure><img src="../public/images/argento.png" alt="#"/></figure>
+                                          <h3>Pepe Argento</h3>
+                                          <p>Si estás buscando una experiencia de compra en línea excepcional y una amplia gama de productos de alta calidad, no busques más allá de "Tuyen". Esta tienda en línea se ha convertido en mi destino favorito para todas mis compras en línea, y por buenas razones.</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item">
+                           <div class="container">
+                              <div class="carousel-caption">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="clients_box">
+                                          <figure><img src="../public/images/sylvester.png" alt="#"/></figure>
+                                          <h3>Sylvester Stallone</h3>
+                                          <p>Para amantes de la moda que buscan las últimas tendencias con una experiencia de compra en línea excepcional, es la elección perfecta. Esta tienda en línea ha ganado mi confianza gracias a su impresionante selección de ropa y accesorios de moda.</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item">
+                           <div class="container">
+                              <div class="carousel-caption">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="clients_box">
+                                          <figure><img src="../public/images/our.png" alt="#"/></figure>
+                                          <h3>Sandy Mark</h3>
+                                          <p>Si eres un entusiasta de la tecnología y buscas los dispositivos y gadgets más innovadores, no puedes dejar de visitar "Tuyen". Esta tienda en línea es un paraíso para los amantes de la tecnología y ofrece una amplia gama de productos electrónicos de alta calidad.</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                     <i class='fa fa-angle-left'></i>
+                     </a>
+                     <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                     <i class='fa fa-angle-right'></i>
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
+      <!-- end clients section -->
+
     </div>
 
 <script src="socket.io/socket.io.js"></script>

@@ -4,9 +4,11 @@ const register = async () => {
     let email = document.getElementById("email").value;
     let avatar = document.getElementById('avatar').value;
     let age = document.getElementById("age").value;
+    let phone = document.getElementById("phone").value;
+    let address = document.getElementById("address").value;
     let password = document.getElementById("password").value;
   
-    const user = { first_name, last_name, email, avatar, age, password };
+    const user = { first_name, last_name, email, avatar, age, phone, address, password };
   
     try {
       const response = await fetch("/api/sessions/register", {

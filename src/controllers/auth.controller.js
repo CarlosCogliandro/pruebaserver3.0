@@ -33,10 +33,10 @@ class AuthController {
       httpOnly: true,
       secure: false,
     });
-    console.log("Login successful, redirecting to /products");
+    console.log("Login successful, redirecting to /");
     return res
       .status(200)
-      .json({ status: "success", user: userData.user, redirect: "/products" });
+      .json({ status: "success", user: userData.user, redirect: "/" });
   };
 
   async githubCallback(req, res) {
@@ -45,7 +45,7 @@ class AuthController {
       if (req.user) {
         req.session.user = req.user;
         req.session.loggedIn = true;
-        return res.redirect("/products");
+        return res.redirect("/");
       } else {
         return res.redirect("/login");
       };
@@ -63,7 +63,7 @@ class AuthController {
           email: user.email,
           rol: user.rol
         };
-        return res.redirect("/products");
+        return res.redirect("/");
       } else {
         return res.redirect("/login");
       };

@@ -22,7 +22,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 import { MONGO_URL, PORT, SESSION_SECRET } from "./config/config.js"
-import { addLoger, levels } from './middleware/logger.js';
+import { addLogger } from './middleware/logger.js';
 
 import productContainer from "./dao/mongoDB/productContainer.js";
 import messagesContainer from "./dao/mongoDB/messagesContainer.js";
@@ -77,11 +77,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 // App Use - LOGGER 
-app.use(addLoger);
-app.get('/pruebaLogger', (req, res) => {
-  levels;
-  res.send("ok");
-});
+app.use(addLogger);
 app.get('/peticion', (req, res) => { res.send(`Petición atendida por ${process.pid}`); });
 
 // Routers
@@ -90,6 +86,10 @@ app.use("/api/sessions/", sessionsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use('/api/email/', emailRouter);
+app.use('/logger', (req, res) => {
+  req.logger.warn('Log de alerta')
+  req.send('Prueba de Logger')
+})
 
 // Containers
 const PC = new productContainer();
@@ -134,6 +134,3 @@ socketServer.on("connection", async (socket) => {
     socketServer.emit("chat", await MC.getMessages());
   });
 });
-
-
-

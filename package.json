@@ -1,9 +1,8 @@
 {
   "type": "module",
-  "name": "desafio3",
+  "name": "pruebaserver",
   "version": "1.0.0",
-  "description": "",
-  "main": "ProductManager.js",
+  "main": "productContainer.js",
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js"
@@ -11,10 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.2.0",
     "@handlebars/allow-prototype-access": "^1.0.5",
+    "artillery": "^2.0.0-38",
+    "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "assert": "^2.1.0",
     "bcrypt": "^5.1.1",
     "chai": "^4.3.10",
+    "commander": "^11.1.0",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -40,5 +43,11 @@
     "supertest": "^6.3.3",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "description": ""
 }

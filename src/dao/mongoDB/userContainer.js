@@ -3,7 +3,7 @@ import usersModel from "./models/user.model.js";
 
 class UserContainer {
 
-  async register({ first_name, last_name, email, avatar, age, password, rol }) {
+  async register({ first_name, last_name, email, avatar, age, phone, address, password, rol }) {
     try {
       const existingUser = await usersModel.findOne({ email });
       if (existingUser) {
@@ -17,8 +17,10 @@ class UserContainer {
         email,
         avatar,
         age,
+        phone,
+        address,
         password: hashedPassword,
-        rol
+        rol,
       });
       console.log("User added!", user);
       return user;
