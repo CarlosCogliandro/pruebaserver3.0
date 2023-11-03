@@ -14,15 +14,13 @@ router.post("/register", userController.register.bind(userController));
 
 router.get("/restore", userController.restorePassword.bind(userController));
 
-router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => { });
+router.get("/github", passport.authenticate("github", { scope: ["user: email"] }), async (req, res) => { });
 router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), async (req, res) => {
-  console.log("GitHub Callback Route");
   authController.githubCallback(req, res);
 });
 
 router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }), async (req, res) => { });
-router.get('/googlecallback', passport.authenticate('google', { failureRedirect: "/login" }), async (req, res) => {
-  console.log("Google Callback Route");
+router.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
   authController.googleCallback(req, res);
 });
 

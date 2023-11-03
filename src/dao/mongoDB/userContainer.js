@@ -60,6 +60,12 @@ class UserContainer {
       return false;
     };
   };
+
+  getBy = (params) => {
+    return usersModel.findOne(params).lean();
+  }
 };
+
+
 
 export default UserContainer;

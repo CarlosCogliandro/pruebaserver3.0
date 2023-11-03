@@ -36,7 +36,6 @@ class AuthController {
   };
 
   async githubCallback(req, res) {
-    console.log("Inside AuthController githubCallback");
     try {
       if (req.user) {
         req.session.user = req.user;
@@ -46,7 +45,6 @@ class AuthController {
         return res.redirect("/login");
       };
     } catch (error) {
-      console.error("An error occurred:", error);
       return res.redirect("/login");
     };
   };
@@ -64,7 +62,6 @@ class AuthController {
         return res.redirect("/login");
       };
     } catch (error) {
-      console.error("An error occurred:", error);
       return res.redirect("/login");
     };
   };
