@@ -34,7 +34,7 @@ class UserContainer {
     try {
       const userLogged = await usersModel.findOne({ email: user });
       if (userLogged && isValidPassword(userLogged, pass)) {
-        const rol = userLogged.email === "adminCoder@coder.com" ? "admin" : "usuario";
+        const rol = userLogged.email === "carloscogliandro22@gmail.com" ? "admin" : "usuario";
         return userLogged;
       }
       return null;

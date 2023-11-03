@@ -45,66 +45,18 @@ class ProductController {
   async createProduct(req, res) {
     let { title, description, code, price, status, stock, category, thumbnail, } = req.body;
     console.log("Received thumbnail:", thumbnail);
-    if (!title) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Title!",
-      });
-      return false;
-    }
-    if (!description) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Description!",
-      });
-      return false;
-    }
-    if (!code) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Code!",
-      });
-      return false;
-    }
-    if (!price) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Price!",
-      });
-      return false;
-    }
+    if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) return res.status(400).send({ status: "error", error: "Valores incompletos" });
     status = !status && true;
-    if (!stock) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Stock!",
-      });
-      return false;
-    }
-    if (!category) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Category!",
-      });
-      return false;
-    }
-    if (!thumbnail) {
-      res.status(400).send({
-        status: "error",
-        message: "Error! No se cargó el campo Thumbnail!",
-      });
-      return false;
-    }
     try {
-      const wasAdded = await this.productService.createProduct({ 
-        title, 
-        description, 
-        code, 
-        price, 
-        status, 
-        stock, 
-        category, 
-        thumbnail: `${req.protocol}://${req.hostname}:${process.env.PORT}/img/${file.filename}`,  // VER ESTO // 
+      const wasAdded = await this.productService.createProduct({
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnail: `${req.protocol}://${req.hostname}:${process.env.PORT}/images/${file.filename}`,  // VER ESTO // 
       });
       if (wasAdded && wasAdded._id) {
         console.log("Producto añadido correctamente:", wasAdded);

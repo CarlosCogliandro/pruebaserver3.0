@@ -1,13 +1,16 @@
 import UserContainer from "../dao/mongoDB/userContainer.js";
+import CartContainer from '../dao/mongoDB/cartContainer.js'
 
 class UserService {
   constructor() {
     this.userContainer = new UserContainer();
+    this.cartContainer = new CartContainer()
   }
   
   async register({ first_name, last_name, email, avatar, age, phone, address, password, rol }) {
     try {
-      const rol = email === "adminCoder@coder.com" ? "admin" : "user";
+      const rol = email === "carloscogliandro22@gmail.com" ? "admin" : "user";
+      const cart = this.cartContainer.newCart();
       const user = await this.userContainer.register({
         first_name,
         last_name,
@@ -18,6 +21,8 @@ class UserService {
         address,
         password,
         rol,
+        admin,
+        cart
       });
       if (user) {
         return { status: "success", user, redirect: "/login" };
@@ -25,7 +30,6 @@ class UserService {
         return { status: "error", message: "User already exists" };
       }
     } catch (error) {
-      console.error("Error registering user:", error);
       return { status: "error", message: "Internal Server Error" };
     };
   };

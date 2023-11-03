@@ -33,12 +33,13 @@
     <div class="container mt-100 row">
       {{#each products.payload}}
         <div class="col-md-4 col-sm-6">
-          <div class="card mb-30">
+          <div style="min-height: 500px;" class="container card mb-30">
             <div class="card-img-tiles">
-              <div class="inner">
-                <div class="main-img"><img src={{thumbnail}} alt="" /></div>
+              <div class="inner" style="display: flex; justify-content: center;">
+                <div class="main-img"><img style="height: 200px; width: auto;" src={{thumbnail}} alt="" /></div>
               </div>
             </div>
+
             <div class="card-body text-center">
               <h4 class="card-title">{{title}}</h4>
               <p class="text-muted">{{description}}</p>
@@ -51,6 +52,7 @@
                 id="addCart-btn"
               >Comprar ahora</a>
             </div>
+
           </div>
         </div>
       {{/each}}

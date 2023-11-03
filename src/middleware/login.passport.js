@@ -3,6 +3,7 @@ import local from "passport-local"
 import usersModel from "../dao/mongoDB/models/user.model.js"
 import { createHash, isValidPassword } from "./bcrypt.js"
 import jwt from "passport-jwt"
+import CartService from '../services/cart.service.js'
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -34,24 +35,22 @@ const initializePassport = () => {
           age,
           avatar,
           password: createHash(password),
-          rol
+          rol,
+          admin: false,
+          cart: await CartService.createCart()
         };
-        console.log("Rol antes de la asignación:", user.rol);
-        if (user.email == "adminCoder@coder.com" && password === "contraseña") {
+        if (user.email == "carloscogliandro22@gmail.com" && password === "contraseña") {
           console.log("Asignando rol de admin");
           user.rol = "admin";
         } else {
           console.log("Asignando rol de usuario");
           user.rol = "user";
         }
-        console.log("Rol después de la asignación:", user.rol);
         let result = await usersModel.create(user);
-        console.log("Usuario después de guardar:", result);
         if (result) {
           return done(null, result);
         }
       } catch (error) {
-        console.error("Error durante el proceso de registro:", error);
         return done(error);
       }
     }
@@ -60,7 +59,6 @@ const initializePassport = () => {
 
   passport.use("login", new LocalStrategy({ usernameField: "email", passwordField: "password"},
     async (username, password, done) => {
-      console.log("[Auth] Trying to authenticate user:", username);
       try {
         let user = await usersModel.findOne({ email: username });
         if (!user) {

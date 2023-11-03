@@ -35,9 +35,7 @@ class CartContainer {
       if (
         mongoose.Types.ObjectId.isValid(cid) && mongoose.Types.ObjectId.isValid(pid)) {
         const product = await this.productContainer.getProductById(pid);
-        console.log("Stock antes de agregar al carrito:", product.stock);
         if (!product) {
-          console.log("Product not found!");
           return {
             status: "error",
             message: "Producto no encontrado!",

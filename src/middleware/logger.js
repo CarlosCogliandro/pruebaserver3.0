@@ -40,10 +40,16 @@ const prodLogger = winston.createLogger({
         new winston.transports.Console({ level: 'http' }),
         new winston.transports.File({
             filename: 'src/services/loggers/http.log',
-            level: 'warning'
+            level: 'error'
         }),
     ]
 })
+
+export const levels = [
+    winston.info("Info valida..."),
+    devLogger.warn("Cuidado, Tenemos un problemita..."),
+    prodLogger.error("Un error se ha detectado..."),
+]
 
 export const addLogger = (req, res, next) => {
     if (config.environment === 'production') {

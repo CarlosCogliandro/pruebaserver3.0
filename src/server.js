@@ -22,7 +22,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 import { MONGO_URL, PORT, SESSION_SECRET } from "./config/config.js"
-import { addLogger } from './middleware/logger.js';
+import { addLogger, levels } from './middleware/logger.js';
 
 import productContainer from "./dao/mongoDB/productContainer.js";
 import messagesContainer from "./dao/mongoDB/messagesContainer.js";
@@ -87,6 +87,7 @@ app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use('/api/email/', emailRouter);
 app.use('/logger', (req, res) => {
+  levels,
   req.logger.warn('Log de alerta')
   req.send('Prueba de Logger')
 })
@@ -102,8 +103,8 @@ socketServer.on("connection", async (socket) => {
   console.log("Un cliente se ha conectado");
   const allProducts = await PC.getProducts();
   socket.emit("initial_products", allProducts);
-  socket.on("addProduct", async (obj) => {
-    await PC.addProduct(obj);
+  socket.on("createProduct", async (obj) => {
+    await PC.createProduct(obj);
     const listadeproductos = await PC.getProductsViews();
     socketServer.emit("envioDeProductos", listadeproductos);
   });
