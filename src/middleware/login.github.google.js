@@ -1,12 +1,9 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
-import GoogleStrategy from 'passport-google-oauth20'
+import GoogleStrategy from 'passport-google-oidc';
 import usersModel from "../dao/mongoDB/models/user.model.js"
 import { GITHUB_USER, GITHUB_PASS, GOOGLE_USER, GOOGLE_PWD } from "../config/config.js";
 import AuthenticationService from "../services/auth.service.js";
-import UserContainer from "../dao/mongoDB/userContainer.js";
-
-const userContainer = new UserContainer;
 
 const initializeStrategiesPassport = () => {
 
@@ -32,8 +29,8 @@ const initializeStrategiesPassport = () => {
 
     // Inicio de sesion con Google
     passport.use("google", new GoogleStrategy({
-        clientID: '483438623181-crhf92lii9if07322tpkd858pk22mo0o.apps.googleusercontent.com',
-        clientSecret: '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',
+        clientID: GOOGLE_USER,
+        clientSecret: GOOGLE_PWD,
         callbackURL: "http://localhost:8080/api/sessions/googlecallback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {

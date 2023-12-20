@@ -1,0 +1,73 @@
+<header class="header">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="width: 100%; height: ;">
+        <div class="container-fluid ">
+          <a class="navbar-brand" href="/"><img src="../public//images/tuyen.png" alt="logo" style="height: 50px;"></a>
+          <div class="navbar-collapse">
+            <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;"></ul>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/realtimeProducts">Formulario</a>
+              </li>
+          <li class="nav-item">
+                <a class="nav-link active" href="/chat">Chat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/products">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disable" href="/profile">Perfil</a>
+              </li>
+              <li>
+                <button id="cartButton">🛒</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+  </header>
+
+<div class="container">
+
+    <form action="/api/users/{{userId}}/documents" id="productForm" target="_blank" method="post" enctype="multipart/form-data">
+        <h3 class="color1">Uploads</h3>
+         <label for="profileImage" class="color1">Imagen de perfil</label>
+         <input type="file" name="profiles" id="profileImage" accept="image/*">
+         <br>
+         <label for="productImage" class="color1">Imagen de producto</label>
+         <input type="file" name="products" id="productImage" accept="image/*">
+         <br>
+         <label for="document" class="color1">Documento</label>
+         <input type="file" name="document" id="document" accept=".pdf,.doc,.docx">
+         <br>
+         <button type="submit" class="btn btn-primary btn-large">Subir</button>
+    </form>
+
+    <div id="uploadMessage"></div>
+
+    <form action="/api/users/{{userId}}/premium-documents" id="productForm" method="post" enctype="multipart/form-data">
+        <h3 class="color1">Upload Premium Data</h3>
+         <label for="identificationDocument" class="color1">Identificacion</label>
+         <input type="file" name="identificationDocument" id="identificationDocument" accept="image/*, .pdf">
+         <br>
+         <label for="domicileProofDocument" class="color1">Comprobante de domicilio</label>
+         <input type="file" name="domicileProofDocument" id="domicileProofDocument" accept="image/*, .pdf">
+         <br>
+         <label for="accountStatementDocument"class="color1">Comprobante de estado de cuenta</label>
+         <input type="file" name="accountStatementDocument" id="accountStatementDocument" accept="image/*, .pdf">
+         <br>
+         <button type="submit" class="btn btn-primary btn-large">Subir</button>
+    </form>
+
+    <div id="uploadPremiumMessage">
+
+<br>
+<br>
+     <form action="/api/users/premium/{{userId}}" method="post" style="display: flex; flex-direction: row; align-content: center; justify-content: center;">
+        <div><button class="btn btn-primary btn-large" type="submit">Hazte Premium</button></div>
+     </form>
+     
+    </div>
+</div>

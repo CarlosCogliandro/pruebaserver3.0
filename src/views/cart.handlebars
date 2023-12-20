@@ -41,9 +41,12 @@
       </a>
       </td>
       <td>
-    {{this.product.title}} - {{this.product.price}} - Cantidad: {{this.quantity}}
+    {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}
    
   {{/each}}
+  <div class="color1">
+    <button onclick="realizarCompra()" class="btn btn-primary btn-large">Realizar Compra</button>
+  </div>
       </table>
     </div>
   </div>

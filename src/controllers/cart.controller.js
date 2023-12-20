@@ -3,6 +3,8 @@ import { cartModel } from "../dao/mongoDB/models/cart.model.js";
 import CartServices from "../services/cart.service.js";
 import ticketController from "./ticket.controller.js";
 import { v4 as uuidv4 } from "uuid";
+import { transporter } from "./email.controller.js";
+import { ADMIN_EMAIL } from "../config/config.js";
 
 class CartController {
   constructor() {
@@ -12,25 +14,36 @@ class CartController {
   async createCart(req, res) {
     try {
       const newCart = await this.cartService.createCart();
-      res.send(newCart);
+      res.status(201).json({
+        status: "success",
+        message: "El carrito creado correctamente",
+        cartId: newCart._id,
+        payload: newCart,
+      });
+      console.log("Carrito creado: ", newCart)
     } catch (error) {
       res.status(500).send({
         status: "error",
         message: error.message,
       });
+      console.log("Error al crear el carrito: ", error)
     };
   };
 
   async getCart(req, res) {
     try {
       const cart = await this.cartService.getCart(req.params.cid);
-      res.send({ products: cart.products });
+      res.json({
+        status: "success",
+        cart: cart,
+      });
+      console.log("Carrito obtenido: ", cart)
     } catch (error) {
-      console.log("hola en cart controller");
       res.status(400).send({
         status: "error",
         message: error.message,
       });
+      console.log("Error al obtener el carrito: ", error)
     };
   };
 
@@ -153,6 +166,29 @@ class CartController {
       const ticketCreated = await ticketController.createTicket({
         body: ticketData,
       });
+      const ticketCode = ticketData.code;
+      console.log(ticketCode);
+      const ticketOwner = ticketData.purchaser;
+      console.log(ticketOwner);
+      if (ticketCode) {
+        console.log("Enviando aviso a owner: ", ticketOwner);
+        const email = ticketOwner;
+        const result = transporter.sendMail({
+          from: ADMIN_EMAIL,
+          to: email,
+          subject: `Tuyen - Un angel para tu hogar - Ticket`,
+          html: `<div style="display: flex; flex-direction: column; justify-content: center;  align-items: center;">
+          Hola, gracias por realizar tu compra con Tuyen!
+          <br>
+          <br>
+          Te enviamos los datos de tu ticket de compra: <br> <br>
+          Monto:\n${ticketData.amount}\n <br> <br>
+          Codigo del ticket:\n${ticketData.code}\n <br> <br>
+          Hora de la compra:\n${ticketData.purchase_datetime}\n <br> <br>
+          Saludos!
+          </div>`,
+        });
+      }
       res.json({
         status: "success",
         message: "Compra realizada con éxito",
@@ -160,7 +196,7 @@ class CartController {
         failedProducts: failedProducts.length > 0 ? failedProducts : undefined,
       });
     } catch (error) {
-      console.error("Error específico al crear el ticket de compra:", error);
+      req.logger.error("Error específico al crear el ticket de compra:", error);
       res.status(500).json({ error: "Error al crear el ticket de compra" });
     };
   };

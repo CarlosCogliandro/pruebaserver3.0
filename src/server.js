@@ -11,6 +11,7 @@ import productsRouter from "./routes/product.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import emailRouter from './routes/email.router.js';
+import userRouter from "./routes/users.routes.js"
 
 import initializePassport from "./middleware/login.passport.js"
 import initializeStrategiesGithubGoogle from "./middleware/login.github.google.js";
@@ -27,7 +28,24 @@ import { addLogger, levels } from './middleware/logger.js';
 import productContainer from "./dao/mongoDB/productContainer.js";
 import messagesContainer from "./dao/mongoDB/messagesContainer.js";
 
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUIExpress from "swagger-ui-express";
+
 const app = express();
+
+// Swagger
+const swaggerOptions = {
+  definition:{
+    openapi:"3.0.1",
+    info:{
+      title: "Documentacion Api",
+      description: "Documentacion para Swagger"
+    }
+  },
+  apis: [`./src/docs/**/*.yaml`]
+}
+
+const specs =  swaggerJSDoc(swaggerOptions)
 
 //Mongo connect
 const connection = mongoose.connect(MONGO_URL, ({
@@ -36,7 +54,7 @@ const connection = mongoose.connect(MONGO_URL, ({
 }));
 
 // Connect to Server
-const httpServer = app.listen(PORT, () => { console.log(`Conectado a http://localhost:${PORT}`) });
+const httpServer = app.listen(PORT, () => { console.log(`Server Conectado a http://localhost:${PORT}`) });
 httpServer.on('Error al conectar ----->', (error) => { console.log(error) });
 
 export const socketServer = new Server(httpServer);
@@ -45,6 +63,7 @@ export const socketServer = new Server(httpServer);
 app.use(express.static(__dirname));
 app.use(express.static(__dirname + "/public"));
 app.use("/images", express.static(__dirname + "/public/images"));
+app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -86,7 +105,8 @@ app.use("/api/sessions/", sessionsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use('/api/email/', emailRouter);
-app.use('/logger', (req, res) => {
+app.use("/api/users/", userRouter);
+app.use('/logger/', (req, res) => {
   levels,
   req.logger.warn('Log de alerta')
   req.send('Prueba de Logger')

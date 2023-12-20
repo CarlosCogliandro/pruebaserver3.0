@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { GMAIL_ACCOUNT_NODEMAILER, GMAIL_PASS_NODEMAILER } from '../config/config.js';
 import __dirname from '../utils.js';
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
     service: 'gmail',
     port: 587,
     auth: {
@@ -75,4 +75,27 @@ export const sendEmailWithAttachments = (req, res) => {
         console.log(error);
         res.status(500).send({ error: error, message: 'No se pudo enviar el correo desde' + GMAIL_ACCOUNT_NODEMAILER });
     }
+};
+
+export const sendEmailForDeletedUsers = (email, message, title, callback) => {
+    let finalEmail = email ? email : GMAIL_ACCOUNT_NODEMAILER;
+    try {
+        let result = transporter.sendMail(mailOptionsDelete(finalEmail, title, message), (error, info) => {
+            if (error) {
+                function doSomething(callback) {
+                    callback({
+                        message: "Error",
+                        payload: error,
+                        code: 400
+                    });
+                }
+                function myCallback() { console.log("El callback se ejecutó."); }
+                doSomething(myCallback);
+            } else {
+                callback(null, { message: "Success!", payload: info })
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    };
 };

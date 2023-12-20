@@ -20,9 +20,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/profile">Perfil</a>
               </li>
-              {{!-- <li>
+              <li>
                 <button id="cartButton">🛒</button>
-              </li> --}}
+              </li>
             </ul>
           </div>
         </div>
@@ -36,14 +36,14 @@
           <div style="min-height: 500px;" class="container card mb-30">
             <div class="card-img-tiles">
               <div class="inner" style="display: flex; justify-content: center;">
-                <div class="main-img"><img style="height: 200px; width: auto;" src={{thumbnail}} alt="" /></div>
+                <div class="main-img"><img style="height: 200px; width: auto;" src={{this.thumbnail}} alt="" /></div>
               </div>
             </div>
 
             <div class="card-body text-center">
-              <h4 class="card-title">{{title}}</h4>
-              <p class="text-muted">{{description}}</p>
-              <h5 class="text-muted">${{price}}</h5>
+              <h4 class="card-title">{{this.title}}</h4>
+              <p class="text-muted">{{this.description}}</p>
+              <h5 class="text-muted">${{this.price}}</h5>
               <a
                 class="btn btn-primary btn-large"
                 href="/products/{{this._id}}"

@@ -20,16 +20,16 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/profile">Perfil</a>
               </li>
-              {{!-- <li>
+              <li>
                 <button id="cartButton">🛒</button>
-              </li> --}}
+              </li>
             </ul>
           </div>
         </div>
       </nav>
   </header> 
    <div class="container">
-      <form id="formProduct">
+      <form id="productForm">
          <div>
             <h2>Agregar producto</h2>
             <input type="text" name="title" id="title" required="required" placeholder="Product Name">
@@ -39,11 +39,14 @@
             <input type="text" name="category" id="category" required="required" placeholder="Category">
             <input type="number" name="price" id="price" required="required" placeholder="Price">
             <input type="text" name="code" id="code" required="required" placeholder="Code">
-            <button class="btn btn-primary btn-large" type="submit" id="addProduct">Registrar</button>
+            <input type="hidden" id="productId" name="productId">
+            <button type="submit" id="submitButton" class="btn btn-primary btn-large">Registrar</button>
+
+            {{!-- <button class="btn btn-primary btn-large" type="submit" id="addProduct">Registrar</button> --}}
          </div>
          </form>
          <br>
-         <form  id="formProduct">
+         {{!-- <form  id="formProduct">
          <div>
             <h2>Eliminar producto:</h2>
             <input type="text" name="id-prod" id="id-prod" placeholder="Ingresar ID del producto a eliminar">
@@ -54,8 +57,21 @@
          <div class="row">
             <article id="list-products"></article>
          </div>
-      </div>
+      </div> --}}
+
+  <ul id="productList" class="realtime-products">
+      {{#each products}}
+      <li id="product-{{this._id}}" class="product">
+        <img src={{this.thumbnail}} alt={{this.title}}>
+        <span>Producto: {{this.title}} - Stock: {{this.stock}} - Descripción: {{this.description}}</span>
+        <button class="delete-button" data-id="{{this._id}}">Eliminar</button>
+        <button class="edit-button" data-id="{{this._id}}">Editar</button>
+      </li>
+      {{/each}}
+    </ul>
+
    </div>
    
 <script src="/socket.io/socket.io.js"></script>
 <script src="../public/js/realTimeProducts.js"></script>
+<script src="../public/js/cart.js"></script>

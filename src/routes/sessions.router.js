@@ -3,6 +3,8 @@ import passport from "passport";
 import { passportCall, authorization } from "../middleware/passAuth.js";
 import UserController from "../controllers/user.controller.js";
 import AuthController from "../controllers/auth.controller.js";
+import errorHandler from "../services/errors/errorsHandler.js";
+import bodyParser from "body-parser";
 
 const router = express.Router();
 const userController = new UserController();
@@ -30,5 +32,18 @@ router.get("/current", passportCall("jwt"), authorization("user"), (req, res) =>
   console.log(req.cookies);
   userController.currentUser(req, res)
 });
+
+
+router.use(bodyParser.urlencoded({ extended: true }));
+
+router.post('/restore-password', async (req, res) => {
+  authController.restorePassword(req, res)
+});
+
+router.post('/reset-password/:token', async (req, res) => {
+  authController.resetPassword(req, res)
+});
+
+router.use(errorHandler);
 
 export default router;

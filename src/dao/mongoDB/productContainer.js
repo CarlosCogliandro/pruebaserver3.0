@@ -1,4 +1,8 @@
 import { productModel } from "./models/product.model.js";
+import userModel from "./models/user.model.js";
+import { transporter } from "../../controllers/email.controller.js";
+import { ADMIN_EMAIL } from "../../config/config.js";
+
 
 class ProductContainer {
 
@@ -17,6 +21,7 @@ class ProductContainer {
           stock: product.stock,
           category: product.category,
           thumbnail: product.thumbnail,
+          owner: product.owner,
         };
         const createdProduct = await productModel.create(producto);
         console.log("Product added!");
@@ -57,18 +62,41 @@ class ProductContainer {
   async deleteProduct(id) {
     try {
       const deletedProduct = await productModel.findByIdAndDelete(id);
+      const owner = deletedProduct.owner;
+      const thisOwner = await userModel.findOne(owner);
+      console.log(thisOwner);
+      const ownerEmail = thisOwner.email;
+      const existProductOwner =  thisOwner;  
+      console.log("Product owner", deletedProduct.owner);
+      console.log("Datos Owner: ", existProductOwner);
+      console.log("Correo del propietario: ", ownerEmail);
+      if (existProductOwner) {
+        console.log("Enviando aviso a owner: ", thisOwner);
+        const email = ownerEmail;
+        const result = transporter.sendMail({
+          from: ADMIN_EMAIL,
+          to: email,
+          subject: `Tu producto ${deletedProduct.title} a sido borrado`,
+          html: ` <div style="display: flex; flex-direction: column; justify-content: center;  align-items: center;">
+                    Hola &nbsp;${thisOwner.first_name}!\nTe informamos que tu producto ${deletedProduct.title} ha sido borrado por la administracion de la pagina.\nSaludos.
+                  </div>`,
+        });
+        if (result.status === 'rejected') {
+          console.log(`El correo electrónico a ${email} fue rechazado`);
+        };
+      };
       if (deletedProduct) {
-        console.log('Producto eliminado correctamente:', deletedProduct);
-        return true;
+          console.log('Producto eliminado correctamente:', deletedProduct);
+          return true;
       } else {
-        console.log('Producto no encontrado:', id);
-        return false;
-      }
-    } catch (error) {
+          console.log('Producto no encontrado:', id);
+          return false;
+      };
+  } catch (error) {
       console.error('Error eliminando producto:', error);
       return false;
-    };
   };
+};
 
   async getProducts(params = {}) {
     let { limit = 10, page = 1, query = {}, sort = {} } = params;

@@ -18,7 +18,9 @@ class CartContainer {
 
   async getCart(id) {
     if (this.validateId(id)) {
-      return (await cartModel.findOne({ _id: id }).lean()) || null;
+      const cart = await cartModel.findOne({ _id: id }).lean();
+      console.log("Cart: ", cart);
+      return cart || null;
     } else {
       console.log("Not found!");
       return null;
@@ -84,20 +86,8 @@ class CartContainer {
           return false;
         }
         console.log("PID:", pid);
-        console.log(
-          "Cart products:",
-          cart.products.map((item) =>
-            item.product._id
-              ? item.product._id.toString()
-              : item.product.toString()
-          )
-        );
-        const product = cart.products.find(
-          (item) =>
-            (item.product._id
-              ? item.product._id.toString()
-              : item.product.toString()) === pid.toString()
-        );
+        console.log("Cart products:", cart.products.map((item) => item.product._id ? item.product._id.toString() : item.product.toString()));
+        const product = cart.products.find((item) => (item.product._id ? item.product._id.toString() : item.product.toString()) === pid.toString());
         if (product) {
           product.quantity = quantity;
           await cartModel.updateOne({ _id: cid }, { products: cart.products });
@@ -106,11 +96,11 @@ class CartContainer {
         } else {
           console.log("Product not found in cart");
           return false;
-        }
+        };
       } else {
         console.log("Invalid cart ID!");
         return false;
-      }
+      };
     } catch (error) {
       console.error("Error while updating product:", error);
       return false;
@@ -125,11 +115,9 @@ class CartContainer {
         { new: true, upsert: true }
       );
       console.log("Product updated!");
-
       return true;
     } catch (error) {
       console.log("Not found!");
-
       return false;
     };
   };
@@ -173,8 +161,8 @@ class CartContainer {
     };
   };
 
-  validateId(id) { 
-    return mongoose.Types.ObjectId.isValid(id) 
+  validateId(id) {
+    return mongoose.Types.ObjectId.isValid(id)
   };
 };
 

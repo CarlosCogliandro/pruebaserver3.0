@@ -5,9 +5,9 @@ const ticketSchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
-        unique:true
+        unique: true
     },
-    purchase_datetime:{
+    purchase_datetime: {
         type: Date,
         default: Date.now,
         required: true
@@ -16,13 +16,12 @@ const ticketSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    purchaser:{
+    purchaser: {
         type: String,
         ref: "users",
         required: true
     }
-})
-
+});
 
 export const ticketModel = mongoose.model("tickets", ticketSchema)
 

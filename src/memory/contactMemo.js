@@ -18,6 +18,8 @@ class ContactsMemo {
         contactDB.name =contact.first_name;
         contactDB.lastname = contact.last_name;
         contactDB.email = contact.email;
+        contactDB.age = contact.age;
+        contactDB.avatar = contact.avatar;
         contactDB.phone= contact.phone;
         contactDB.password = contact.password;
         return contactDB;

@@ -1,2 +1,6 @@
 node_modules
 package-lock.json
+
+src/uploads/documents/**
+src/uploads/products/**
+src/uploads/profiles/**

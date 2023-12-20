@@ -8,7 +8,7 @@
 
 /* Formulario */
 
-#formProduct {
+#productForm {
   width: 600px;
   background: #32243ce7;
   padding: 30px;
@@ -19,7 +19,7 @@
   box-shadow: 7px 13px 37px #360606;
 }
 
-#formProduct h2 {
+#productForm h2 {
   height: 40px;
   text-align: center;
   font-size: 18px;
