@@ -36,9 +36,9 @@ const app = express();
 
 // Swagger
 const swaggerOptions = {
-  definition:{
-    openapi:"3.0.1",
-    info:{
+  definition: {
+    openapi: "3.0.1",
+    info: {
       title: "Documentacion Api",
       description: "Documentacion para Swagger"
     }
@@ -46,15 +46,15 @@ const swaggerOptions = {
   apis: [`./src/docs/**/*.yaml`]
 }
 
-const specs =  swaggerJSDoc(swaggerOptions)
+const specs = swaggerJSDoc(swaggerOptions)
 
 app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 
 //Mongo connect
-const connection = mongoose.connect(MONGO_URL, ({
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}));
+});
 
 // Connect to Server
 const httpServer = app.listen(PORT, () => { console.log(`Server Conectado a http://localhost:${PORT}`) });
@@ -111,7 +111,7 @@ app.use("/api/users/", userRouter);
 app.use("/payment", paymentRouter);
 app.use('/logger/', (req, res) => {
   levels,
-  req.logger.warn('Log de alerta')
+    req.logger.warn('Log de alerta')
   req.send('Prueba de Logger')
 })
 

@@ -7,6 +7,7 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let folder;
         console.log(file);
+        
         if (file.fieldname === "profiles") {
             folder = path.join(__dirname + '/uploads/profiles');
         } else if (file.fieldname === "products") {

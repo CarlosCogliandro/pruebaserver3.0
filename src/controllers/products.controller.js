@@ -3,6 +3,7 @@ import { socketServer } from "../server.js";
 import mongoose from "mongoose";
 import CustomeError from "../services/errors/customeError.js";
 import { productError } from "../services/errors/errorMessages/product.error.js";
+import { PORT } from "../config/config.js"
 
 class ProductController {
   constructor() {
@@ -59,7 +60,7 @@ class ProductController {
           status,
           stock,
           category,
-          thumbnail,
+          thumbnail: `${req.protocol}://${req.hostname}:${PORT}/public/images/${file.filename}`,
           owner,
         });
         return;

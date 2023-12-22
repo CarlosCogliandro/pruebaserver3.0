@@ -97,7 +97,7 @@ class ProductContainer {
 };
 
   async getProducts(params = {}) {
-    let { limit = 10, page = 1, query = {}, sort = {} } = params;
+    let { limit = 14, page = 1, query = {}, sort = {} } = params;
     console.log("Query object:", query, "Type:", typeof query);
     sort = sort ? (sort === "asc" ? { price: 1 } : { price: -1 }) : {};
     try {
