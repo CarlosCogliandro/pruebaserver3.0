@@ -20,6 +20,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/profile">Perfil</a>
               </li>
+              <li class="nav-item">
+                        <a class="nav-link active" href="/usermanagment">Manager de usuarios</a>
+                     </li> 
               <li>
                 <button id="cartButton">🛒</button>
               </li>
@@ -28,6 +31,7 @@
         </div>
       </nav>
   </header>
+
 <div class="container">
   <div>
     <div class="container mt-100 row">
@@ -39,20 +43,12 @@
                 <div class="main-img"><img style="height: 200px; width: auto;" src={{this.thumbnail}} alt="" /></div>
               </div>
             </div>
-
             <div class="card-body text-center">
               <h4 class="card-title">{{this.title}}</h4>
               <p class="text-muted">{{this.description}}</p>
               <h5 class="text-muted">${{this.price}}</h5>
-              <a
-                class="btn btn-primary btn-large"
-                href="/products/{{this._id}}"
-                data-abc="true"
-                type="button"
-                id="addCart-btn"
-              >Comprar ahora</a>
+              <a href="/products/{{this._id}}"><button class="btn btn-primary btn-large" type="button" id="addCart-btn">Comprar ahora</button> </a>
             </div>
-
           </div>
         </div>
       {{/each}}

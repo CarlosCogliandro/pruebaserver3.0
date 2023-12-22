@@ -1,6 +1,6 @@
 import passport from "passport"
 import local from "passport-local"
-import usersModel from "../dao/mongoDB/models/user.model.js"
+import userModel from "../dao/mongoDB/models/user.model.js"
 import { createHash, isValidPassword } from "./bcrypt.js"
 import jwt from "passport-jwt"
 import CartService from "../services/cart.service.js"
@@ -25,9 +25,9 @@ const cookieExtractor = (req) => {
 const initializePassport = () => {
   passport.use("register", new LocalStrategy({ passReqToCallback: true, usernameField: "email" },
     async (req, username, password, done) => {
-      const { first_name, last_name, email, age, avatar } = req.body;
+      const { first_name, last_name, email, age, phone, address, avatar } = req.body;
       try {
-        let user = await usersModel.findOne({ email: username });
+        let user = await userModel.findOne({ email: username });
         if (user) {
           console.log(email + " ya se encuentra registrado!");
           return done(null, false);
@@ -37,10 +37,13 @@ const initializePassport = () => {
           last_name,
           email,
           age,
+          phone,
+          address,
           avatar,
           password: createHash(password),
           rol,
         };
+        console.log("Rol antes de la asignación:", user.rol);
         if (user.email == ADMIN_EMAIL && password === ADMIN_PASSWORD) {
           console.log("Asignando rol de admin");
           user.rol = 'admin';
@@ -52,13 +55,12 @@ const initializePassport = () => {
           user.rol = 'user';
         }
         console.log("Rol después de la asignación:", user.rol);
-        let result = await usersModel.create(user);
+        let result = await userModel.create(user);
         console.log("Usuario después de guardar:", result);
         if (result) {
           return done(null, result);
         }
       } catch (error) {
-
         return done(error);
       }
     }
@@ -67,8 +69,9 @@ const initializePassport = () => {
 
   passport.use("login", new LocalStrategy({ usernameField: "email", passwordField: "password" },
     async (username, password, done) => {
+      console.log("[Auth] Trying to authenticate user:", username);
       try {
-        let user = await usersModel.findOne({ email: username });
+        let user = await userModel.findOne({ email: username });
         if (!user) { return done(null, false, { message: "Usuario incorrecto." }); }
         if (!isValidPassword(user, password)) { return done(null, false, { message: "Contraseña incorrecta." }); }
         if (!user.cart) {
@@ -89,7 +92,7 @@ const initializePassport = () => {
   },
     async (jwt_payload, done) => {
       try {
-        const user = await usersModel.findOne({ email: jwt_payload.email });
+        const user = await userModel.findOne({ email: jwt_payload.email });
         if (!user) {
           return done(null, false, { message: "Usuario no encontrado en nuestra base de datos" })
         }
@@ -105,7 +108,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-  let user = await usersModel.findById(id)
+  let user = await userModel.findById(id)
   done(null, user)
 })
 

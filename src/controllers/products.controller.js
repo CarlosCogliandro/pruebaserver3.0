@@ -11,48 +11,57 @@ class ProductController {
 
   async createProduct(req, res) {
     let { title, description, code, price, status, stock, category, thumbnail, } = req.body;
-    const owner = req.user_id;
+    const owner = req.user._id;
     if (!title) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Titulo" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Title!", });
+      return false;
     };
     if (!description) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Description" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Description!", });
+      return false;
     };
     if (!code) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Codigo" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Code!", });
+      return false;
     };
     if (!price) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Price" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Price!", });
+      return false;
     };
     status = !status && true;
     if (!stock) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Stock" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Stock!", });
+      return false;
     };
     if (!category) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Category" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Category!", });
+      return false;
     };
     if (!thumbnail) {
-      res.status(400).send({ status: "error", message: "Error no se cargo el campo Thumbnail" })
+      res.status(400).send({ status: "error", message: "Error! No se cargó el campo Thumbnail!", });
+      return false;
     };
     try {
-      const wasAdded = await this.productService.createProduct({
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnail: `${req.protocol}://${req.hostname}:${process.env.PORT}/images/${file.filename}`,
-        owner,
-      });
+      const wasAdded = await this.productService.createProduct({ title, description, code, price, status, stock, category, thumbnail, owner, });
       if (wasAdded && wasAdded._id) {
+        console.log("Producto añadido correctamente:", wasAdded);
         res.send({
           status: "ok",
           message: "El Producto se agregó correctamente!",
           productId: wasAdded._id,
         });
-        socketServer.emit("product_created", { _id: wasAdded._id, title, description, code, price, status, stock, category, thumbnail, owner, });
+        socketServer.emit("product_created", {
+          _id: wasAdded._id,
+          title,
+          description,
+          code,
+          price,
+          status,
+          stock,
+          category,
+          thumbnail,
+          owner,
+        });
         return;
       } else {
         console.log("Error al añadir producto, wasAdded:", wasAdded);
@@ -61,12 +70,13 @@ class ProductController {
           message: "Error! No se pudo agregar el Producto!",
         });
         return;
-      }
+      };
     } catch (error) {
-      console.error("Error en addProduct:", error, "Stack:", error.stack);
-      res
-        .status(500)
-        .send({ status: "error", message: "Internal server error." });
+      console.log("Error en addProduct:", error, "Stack:", error.stack);
+      res.status(500).send({
+        status: "error",
+        message: "Internal server error."
+      });
       return;
     };
   };
@@ -82,7 +92,7 @@ class ProductController {
         code: 500,
         cause: error.message,
       });
-      req.logger.error(productErr);
+      console.log(productErr);
       res.status(productErr.code).send({ status: "error", message: "Error al obtener los productos" })
     }
   }
@@ -90,6 +100,7 @@ class ProductController {
   async getProductById(req, res) {
     try {
       const pid = req.params.pid;
+      console.log("Product ID:", pid);
       if (!mongoose.Types.ObjectId.isValid(pid)) {
         throw new CustomeError({
           name: "Invalid ID",
@@ -167,7 +178,7 @@ class ProductController {
         });
         return;
       }
-      if (!req.user || (req.user.role !== "admin" && (!product.owner || req.user._id.toString() !== product.owner.toString()))) {
+      if (!req.user || (req.user.rol !== "admin" && (!product.owner || req.user._id.toString() !== product.owner.toString()))) {
         console.log("Operación no permitida: el usuario no tiene derechos para eliminar este producto.");
         res.status(403).send({
           status: "error",

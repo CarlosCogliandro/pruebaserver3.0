@@ -1,11 +1,12 @@
 import { createHash } from "../middleware/bcrypt.js";
+import { generateUserError } from "../services/errors/errorMessages/user.creation.error.js";
 import UserService from "../services/user.service.js";
 import UserResponse from "../dao/DTO/user.response.js";
 import CustomeError from "../services/errors/customeError.js";
 import EErrors from "../services/errors/errorsEnum.js";
 import userModel from "../dao/mongoDB/models/user.model.js";
 import UserContainer from "../dao/mongoDB/userContainer.js";
-import { ADMIN_EMAIL } from "../config/config.js";
+import { ADMIN_EMAIL, GMAIL_ACCOUNT_NODEMAILER } from "../config/config.js";
 import { transporter } from "./email.controller.js";
 
 class UserController {
@@ -14,7 +15,7 @@ class UserController {
     this.userContainer = new UserContainer();
   };
 
-  async register(req, res) {
+  async register(req, res, next) {
     try {
       const { first_name, last_name, email, avatar, age, phone, password, rol } = req.body;
       if (!first_name || !email || !age || !password) {
@@ -342,7 +343,7 @@ class UserController {
       for (const user of inactiveUsers) {
         const email = user.email;
         const result = transporter.sendMail({
-          from: ADMIN_EMAIL,
+          from: GMAIL_ACCOUNT_NODEMAILER,
           to: email,
           subject: 'Cuenta dada de baja por inactividad',
           html: `

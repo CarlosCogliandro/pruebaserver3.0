@@ -1,9 +1,6 @@
 import UserContainer from "../dao/mongoDB/userContainer.js";
 import CartContainer from '../dao/mongoDB/cartContainer.js';
-import { ADMIN_EMAIL, ADMIN_PASSWORD, PREMIUM_EMAIL, PREMIUM_PASSWORD } from "../config/config.js";
-import EmailService from "./email.service.js";
-
-const emailService = new EmailService();
+import { ADMIN_EMAIL, ADMIN_PASSWORD, PREMIUM_EMAIL, PREMIUM_PASSWORD, GET_INACTIVE_DAYS } from "../config/config.js";
 
 class UserService {
   constructor() {
@@ -11,7 +8,7 @@ class UserService {
     this.cartContainer = new CartContainer()
   };
 
-  async registerUser({ first_name, last_name, email, avatar, age, phone, password, rol, last_connection }) {
+  async registerUser({ first_name, last_name, email, avatar, age, adress, phone, password, rol, last_connection }) {
     try {
       const cartResponse = await this.cartContainer.newCart();
       console.log("Cart response:", cartResponse);
@@ -27,6 +24,7 @@ class UserService {
         email,
         avatar,
         age,
+        adress,
         phone,
         password,
         rol,
@@ -80,29 +78,6 @@ class UserService {
     };
   };
 
-  async deleteInactiveUsers() {
-    try {
-      const days = 60;
-      const usersDeleted = await this.userContainer.searchLastConnection(days);
-      usersDeleted.forEach(async (user) => {
-        const title = "Notificacion de eliminacion de cuenta por inactividad"
-        const message = `Hola ${user.first_name} \nTe informamos que tu cuenta a sido dada de baja por inactividad. \nPedimos disculpas por los inconvenientes. \nSaludos.`
-        await emailService.sendEmail(user.email, message, title, (error, result) => {
-          if (error) {
-            throw {
-              error: result.error,
-              message: result.message,
-            }
-          }
-        })
-      });
-      return usersDeleted;
-    } catch (error) {
-      console.warn(`Error al eliminar usuarios inactivos: ${error.message}`);
-      next(error);
-    };
-  };
-
   async updateUser(userId, userToReplace) {
     return await this.userContainer.updateUser(userId, userToReplace);
   };
@@ -135,13 +110,13 @@ class UserService {
         if (hasRequiredDocuments) {
           if (user.rol === "user") {
             user.rol = "premium";
-            const changedRole = await this.userContainer.updateUser(email, user);
-            return changedRole
+            const changedRol = await this.userContainer.updateUser(email, user);
+            return changedRol;
           } else if (user.rol === "premium") {
             user.rol = "user";
-            const changedRole = await this.userContainer.updateUser(email, user);
-            return changedRole;
-          }
+            const changedRol = await this.userContainer.updateUser(email, user);
+            return changedRol;
+          };
         } else {
           throw new Error('Something went wrong validating. Must have all 3 documents to swap role');
         }

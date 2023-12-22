@@ -1,22 +1,3 @@
-// const createCart = async () => {
-//   try {
-//     if (localStorage.getItem("carrito")) {
-//       return JSON.parse(localStorage.getItem("carrito"));
-//     } else {
-//       const response = await fetch("/api/carts/", {
-//         method: "POST",
-//         headers: { "Content-type": "application/json; charset=UTF-8" },
-//       });
-//       const data = await response.json();
-//       console.log("Data del carrito:", data);
-//       localStorage.setItem("carrito", JSON.stringify({ id: data.id }));
-//       return { id: data.id };
-//     }
-//   } catch (error) {
-//     console.log("Error en Crear el Carrito! " + error);
-//   }
-// };
-
 const getCartID = async () => {
   try {
     const response = await fetch("/api/carts/usuario/carrito", {
@@ -90,10 +71,6 @@ async function getPurchase() {
       } else {
         throw new Error('Failed to purchase cart.');
       }
-    }).then(data => {
-      console.log(data)
-      const ticketCode = data.ticket._id;
-      window.location.href = `/tickets/${ticketCode}`;
     })
     if (!response.ok) {
       console.error("Error al realizar la compra");
@@ -110,8 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cartButton) {
     cartButton.addEventListener("click", async () => {
       try {
-        const cartId = await getCartID();
-        if (cartId) {
+        const cid = await getCartID();
+        if (cid) {
           window.location.assign(`/carts/`);
         } else {
           console.error("El ID del carrito es undefined");
@@ -119,7 +96,34 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Error al obtener el ID del carrito: " + error);
       }
-      error.preventDefault();
+      e.preventDefault();
     });
   };
 });
+
+const eliminarProductoDelCarrito = async (pid) => {
+  try {
+    const cid = await getCartID();
+    const response = await fetch(`/api/carts/${cid}/products/${pid}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }).then(response => {
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Producto eliminado con exito",
+          text: "Refresca la pagina para ver tu nuevo resumen de productos. Muchas gracias.",
+        });
+        return res.json();
+      } else {
+        throw new Error('Fallo al borrar el producto del carrito');
+      }
+    });
+    if (!response.ok) {
+      throw new Error("Error al eliminar el producto del carrito.");
+    }
+    console.log("Producto eliminado del carrito con éxito.");
+  } catch (error) {
+    console.error("Error al eliminar el producto del carrito: " + error);
+  }
+};

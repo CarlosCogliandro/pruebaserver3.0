@@ -20,6 +20,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/profile">Perfil</a>
               </li>
+              <li class="nav-item">
+                        <a class="nav-link active" href="/usermanagment">Manager de usuarios</a>
+                     </li> 
               <li>
                 <button id="cartButton">🛒</button>
               </li>
@@ -41,24 +44,10 @@
             <input type="text" name="code" id="code" required="required" placeholder="Code">
             <input type="hidden" id="productId" name="productId">
             <button type="submit" id="submitButton" class="btn btn-primary btn-large">Registrar</button>
-
-            {{!-- <button class="btn btn-primary btn-large" type="submit" id="addProduct">Registrar</button> --}}
          </div>
          </form>
          <br>
-         {{!-- <form  id="formProduct">
-         <div>
-            <h2>Eliminar producto:</h2>
-            <input type="text" name="id-prod" id="id-prod" placeholder="Ingresar ID del producto a eliminar">
-            <button class="btn btn-primary btn-large" type="button" id="delete-btn">Eliminar</button>
-         </div>
-      </form>
-      <div class="container-fluid">
-         <div class="row">
-            <article id="list-products"></article>
-         </div>
-      </div> --}}
-
+        
   <ul id="productList" class="realtime-products">
       {{#each products}}
       <li id="product-{{this._id}}" class="product">

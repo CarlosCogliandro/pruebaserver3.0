@@ -148,6 +148,19 @@ router.get("/failregister", async (req, res) => {
 
 router.get("/usermanagment", passportCall("jwt"), authorization(['admin']), userController.getUserManagment.bind(userController));
 
-router.get('/tickets/:code', passportCall('jwt'), TicketController.getTicketDetail.bind(TicketController));
+router.get("/ticket-detail/:ticketId", async (req, res) => {
+  const ticketId = req.params.ticketId;
+  try {
+    const ticket = await TicketController.getTicketDetail(ticketId);
+    if (ticket) {
+      res.render("ticketDetail", { ticket });
+    } else {
+      res.status(404).send("No se ha encontrado el ticket");
+    };
+  } catch (error) {
+    console.error("Error al traer el ticket: ", error);
+    res.status(500).send("Error interno");
+  };
+});
 
 export default router;

@@ -5,45 +5,51 @@ import sendResetPasswordEmail from "./resetPasswordController.js";
 import CustomeError from "../services/errors/customeError.js";
 import { generateAuthenticationErrorInfo } from "../services/errors/errorMessages/user-auth-error.js";
 
-
-class AuthController {
+class AuthController {role
   constructor() {
     this.authService = new AuthService();
   };
 
   async login(req, res) {
-    const { email, password } = req.body;
-    const userData = await this.authService.login(email, password);
-    userData.user.last_connection = new Date();
-    await userData.user.save();
-    if (!userData || !userData.user) {
-      const customeError = new CustomeError({
-        name: "Auth Error",
-        message: "Credenciales invalidas",
-        code: 401,
-        cause: generateAuthenticationErrorInfo(email),
+    try {
+      const { email, password } = req.body;
+      const userData = await this.authService.login(email, password);
+      req.logger.info("User data retrieved:", userData);
+      userData.user.last_connection = new Date();
+      console.log("last_conection +653626", userData.user.last_connection);
+      await userData.user.save();
+      if (!userData || !userData.user) {
+        console.warn("Invalid credentials");
+        const customeError = new CustomeError({
+          name: "Auth Error",
+          message: "Credenciales invalidas",
+          code: 401,
+          cause: generateAuthenticationErrorInfo(email),
+        });
+        return next(customeError)
+      }
+      if (userData && userData.user) {
+        req.session.user = {
+          id: userData.user.id || userData.user._id,
+          email: userData.user.email,
+          first_name: userData.user.first_name,
+          last_name: userData.user.last_name,
+          age: userData.user.age,
+          rol: userData.user.rol,
+          cart: userData.user.cart
+        };
+      }
+      console.log("Full user data object:", userData.user);
+      res.cookie("coderCookieToken", userData.token, {
+        httpOnly: true,
+        secure: false,
       });
-      return next(customeError)
+      return res.status(200).json({ status: "success", user: userData.user, redirect: "/" });
+    } catch (error) {
+      console.log("Ocurrio un error: ", error);
+      return (error);
     }
-    if (userData && userData.user) {
-      req.session.user = {
-        id: userData.user.id || userData.user._id,
-        email: userData.user.email,
-        first_name: userData.user.first_name,
-        last_name: userData.user.last_name,
-        age: userData.user.age,
-        rol: userData.user.rol,
-        cart: userData.user.cart
-      };
-    }
-    res.cookie("coderCookieToken", userData.token, {
-      httpOnly: true,
-      secure: false,
-    });
-    return res
-      .status(200)
-      .json({ status: "success", user: userData.user, redirect: "/" });
-  };
+  }
 
   async githubCallback(req, res) {
     try {
@@ -55,6 +61,7 @@ class AuthController {
         return res.redirect("/login");
       };
     } catch (error) {
+      console.log("An error occurred:", error);
       return res.redirect("/login");
     };
   };

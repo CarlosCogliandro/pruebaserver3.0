@@ -6,7 +6,6 @@ export const passportCall = (strategy) => {
     passport.authenticate(strategy, function (error, user, info) {
       console.log('Autenticación en proceso');
       if (error) {
-        console.error('Error durante la autenticación', error);
         return next(error);
       }
       if (!user) {

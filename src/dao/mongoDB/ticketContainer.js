@@ -1,6 +1,6 @@
 import { ticketModel } from "./models/ticket.model.js";
 
-class TicketContainer {
+export default class TicketContainer {
     
     async getAll(){
         try {
@@ -42,5 +42,3 @@ class TicketContainer {
         return await ticketModel.findById(tid).lean();
     };
 };
-
-export default TicketContainer;

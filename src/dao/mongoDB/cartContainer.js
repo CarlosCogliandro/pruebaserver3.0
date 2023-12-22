@@ -17,6 +17,7 @@ class CartContainer {
   };
 
   async getCart(id) {
+    console.log('Getting cart with ID:', id);  
     if (this.validateId(id)) {
       const cart = await cartModel.findOne({ _id: id }).lean();
       console.log("Cart: ", cart);
@@ -37,7 +38,9 @@ class CartContainer {
       if (
         mongoose.Types.ObjectId.isValid(cid) && mongoose.Types.ObjectId.isValid(pid)) {
         const product = await this.productContainer.getProductById(pid);
+        console.log("Stock antes de agregar al carrito:", product.stock);
         if (!product) {
+          console.log("Product not found!");
           return {
             status: "error",
             message: "Producto no encontrado!",
@@ -147,7 +150,6 @@ class CartContainer {
     try {
       if (this.validateId(cid)) {
         const cart = await this.getCart(cid);
-
         await cartModel.updateOne({ _id: cid }, { products: [] });
         console.log("Products deleted!");
         return true;

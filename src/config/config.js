@@ -28,6 +28,13 @@ export const GMAIL_PASS_NODEMAILER = process.env.GMAIL_PASS_NODEMAILER;
 export const PREMIUM_EMAIL = process.env.PREMIUM_EMAIL;
 export const PREMIUM_PASSWORD = process.env.PREMIUM_PASSWORD;
 
+// Inactives
+export const GET_INACTIVE_DAYS = process.env.GET_INACTIVE_DAYS;
+
+// Stripe
+export const STRIPE_KEY = process.env.STRIPE_KEY;
+
+
 // Instancia de Commander
 const program = new Command();
 

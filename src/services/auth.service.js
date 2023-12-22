@@ -24,6 +24,7 @@ class AuthService {
                 throw new Error("La informacion de perfil esta incompleta");
             }
             if (!profile._json.email) {
+                console.warn('Email is null. Handling this case specifically.');
                 profile._json.email = 'sinemail@ejemplo.com';
             }
             let user = await userModel.findOne({ email: profile._json.email });

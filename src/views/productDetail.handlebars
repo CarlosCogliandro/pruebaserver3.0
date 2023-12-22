@@ -20,6 +20,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/profile">Perfil</a>
               </li>
+              <li class="nav-item">
+                        <a class="nav-link active" href="/usermanagment">Manager de usuarios</a>
+                     </li> 
               <li>
                 <button id="cartButton">🛒</button>
               </li>
@@ -27,7 +30,8 @@
           </div>
         </div>
       </nav>
-  </header>        
+  </header>  
+
 		<section class="product container mt-100 row" style="margin-top: 50px;">
 	<div class="product__photo">
 		<div class="photo-container">
@@ -44,6 +48,9 @@
 		<div class="price">
 			$ <span>{{product.price}}</span>
 		</div>
+    <div>
+			<span>{{product.description}}</span>
+		</div>
 		<div class="description">
 			<h3>FORMAS DE PAGO:</h3>
 			<ul>
@@ -53,7 +60,7 @@
 				<li>Pago contra reembolso</li>
 			</ul>
 		</div>
-        <button type="button" id="addCart-btn" class="btn btn-primary btn-large" onclick="addProductToCart('{{product._id}}')">Agregar al carrito</button>
+        <button class="btn btn-primary btn-large" onclick="addProductToCart('{{product._id}}')">Agregar al carrito</button>
 	</div>
 </section> 
 

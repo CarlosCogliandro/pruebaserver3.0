@@ -1,11 +1,9 @@
 import { productModel } from "./models/product.model.js";
 import userModel from "./models/user.model.js";
 import { transporter } from "../../controllers/email.controller.js";
-import { ADMIN_EMAIL } from "../../config/config.js";
-
+import { GMAIL_ACCOUNT_NODEMAILER } from "../../config/config.js";
 
 class ProductContainer {
-
   async createProduct(product) {
     try {
       if (await this.validateCode(product.code)) {
@@ -74,7 +72,7 @@ class ProductContainer {
         console.log("Enviando aviso a owner: ", thisOwner);
         const email = ownerEmail;
         const result = transporter.sendMail({
-          from: ADMIN_EMAIL,
+          from: GMAIL_ACCOUNT_NODEMAILER,
           to: email,
           subject: `Tu producto ${deletedProduct.title} a sido borrado`,
           html: ` <div style="display: flex; flex-direction: column; justify-content: center;  align-items: center;">

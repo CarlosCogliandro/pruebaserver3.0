@@ -12,6 +12,7 @@ import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import emailRouter from './routes/email.router.js';
 import userRouter from "./routes/users.routes.js"
+import paymentRouter from "./routes/payments.routes.js";
 
 import initializePassport from "./middleware/login.passport.js"
 import initializeStrategiesGithubGoogle from "./middleware/login.github.google.js";
@@ -47,6 +48,8 @@ const swaggerOptions = {
 
 const specs =  swaggerJSDoc(swaggerOptions)
 
+app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
+
 //Mongo connect
 const connection = mongoose.connect(MONGO_URL, ({
   useNewUrlParser: true,
@@ -63,7 +66,6 @@ export const socketServer = new Server(httpServer);
 app.use(express.static(__dirname));
 app.use(express.static(__dirname + "/public"));
 app.use("/images", express.static(__dirname + "/public/images"));
-app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -106,6 +108,7 @@ app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use('/api/email/', emailRouter);
 app.use("/api/users/", userRouter);
+app.use("/payment", paymentRouter);
 app.use('/logger/', (req, res) => {
   levels,
   req.logger.warn('Log de alerta')

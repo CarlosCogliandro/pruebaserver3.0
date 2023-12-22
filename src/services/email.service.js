@@ -3,7 +3,6 @@ import { GMAIL_ACCOUNT_NODEMAILER, GMAIL_PASS_NODEMAILER } from '../config/confi
 
 export default class EmailService {
     static #transporter
-    
     constructor() {
         if (!EmailService.#transporter) {
             EmailService.#transporter = nodemailer.createTransport({
@@ -26,7 +25,6 @@ export default class EmailService {
             });
         }
     };
-
     #mailOptions = (receiver, title, message) => {
         return {
             from: "Test" + GMAIL_ACCOUNT_NODEMAILER,

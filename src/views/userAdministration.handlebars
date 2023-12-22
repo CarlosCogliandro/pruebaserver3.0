@@ -1,0 +1,179 @@
+<header class="header">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="width: 100%; height: ;">
+        <div class="container-fluid ">
+          <a class="navbar-brand" href="/"><img src="../public//images/tuyen.png" alt="logo" style="height: 50px;"></a>
+          <div class="navbar-collapse">
+            <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;"></ul>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/realtimeProducts">Formulario</a>
+              </li>
+          <li class="nav-item">
+                <a class="nav-link active" href="/chat">Chat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/products">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/profile">Perfil</a>
+              </li>
+              <li class="nav-item">
+                        <a class="nav-link disable" href="/usermanagment">Manager de usuarios</a>
+                     </li> 
+              <li>
+                <button id="cartButton">🛒</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+  </header>
+
+<div class="container">
+    <div class="m-2">
+        <button type="submit" id="deleteInactive" class="btn btn-danger mb-2">
+            <script>
+                document.getElementById("deleteInactive").addEventListener("click", function (){
+                    deleteInactiveUsers();
+                });
+            </script>
+            Borrar usuarios inactivos
+        </button>
+    </div>
+    <u1>
+        {{#each users}}
+        <div class="accordion m-2" id="accordionPannelStayOpen{{email}}">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-h{{email}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#panelsStayOpen-{{email}}" aria-expanded="true" aria-controls="panelsStayOpen-{{email}}">
+                        <strong>Email: {{email}} </strong>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-{{email}}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-h{{email}}">
+                   <div class="accordion-body">
+                      Nombre: {{first_name}}
+                      <br>
+                      Apellido: {{last_name}}
+                      <br>
+                      Edad: {{age}}
+                      <br>
+                      Rol: <code>{{rol}}</code>
+                      <br>
+                      Ultima coneccion: {{last_connection}}
+                      <br>
+                      <div class="m-2">
+                        <button type="submit" id="changeRole-{{email}}" class="btn btn-success mb-2">
+                          <script>
+                            document.getElementById("changeRole-{{email}}").addEventListener("click", function (){
+                                changeRole("{{email}}");
+                            });
+                          </script>
+                          Cambiar Rol
+                        </button>
+                        <button type="submit" id="delete-{{email}}" class="btn btn-danger mb-2">
+                            <script>
+                                document.getElementById("delete-{{email}}").addEventListener("click", function(){
+                                    deleteUser("{{email}}");
+                                });
+                            </script>
+                            Borrar
+                        </button>
+                      </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </u1>
+    <div class="toast-container postion-fixed bottom-0 end-0 p-3">
+      <div id="toastNotPremium" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+         <div class="toast-body">
+              El usuario no puede convertirse en premium si no adjunta la documentacion primero en el sector "Premium".
+         </div>
+      </div>
+    </div>
+    <div class="toast-container postion-fixed bottom-0 end-0 p-3">
+      <div id="toastNotDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+         <div class="toast-body">
+              El usuario no se puede eliminar.
+         </div>
+      </div>
+    </div>
+    <div class="toast-container postion-fixed bottom-0 end-0 p-3">
+      <div id="toastNotDeleteInactive" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+         <div class="toast-body">
+              El usuario inactivo no se puede eliminar.
+         </div>
+      </div>
+    </div>
+</div>
+<script>
+    function changeRole(userId){
+        fetch(`/api/users/update/${userId}`, {
+            method: 'POST',
+        }).then(res =>{
+            if(res.ok){
+                return res.json();
+            } else {
+                throw new Error ('Algo salio mal');
+            }
+        }).then(data =>{
+            console.log(data);
+            window.location.reload();
+        }).catch(err =>{
+            console.log(err);
+            Swal.fire({
+                icon: "error",
+                text: 'El usuario debe ingresar los documentos requeridos en el sector de Premium para poder cambiar de rol'
+            });
+        });
+    };
+    function deleteUser(getUser){
+        
+        console.log("En delete")
+        fetch('/api/users/' + getUser, {
+            method: 'DELETE',
+            
+        }).then(res =>{
+            if(res.ok){
+                return res.json();
+            } else {
+                throw new Error ('Algo salio mal');
+            }
+        }).then(data =>{
+            console.log(data);
+            window.location.reload();
+        }).catch(err =>{
+            console.log(err);
+            Swal.fire({
+                icon: "error",
+                text: 'No se pudo eliminar al usuario'
+            });
+        });
+    };
+    function deleteInactiveUsers(){
+        fetch('/api/users/', {
+            method: 'DELETE',
+        }).then(res =>{
+            if(res.ok){
+                return res.json();
+            } else {
+                throw new Error ('Algo salio mal');
+            }
+        }).then(data =>{
+            console.log(data);
+            window.location.reload();
+        }).catch(err =>{
+            console.log(err);
+            Swal.fire({
+                icon: "error",
+                text: 'No se pudo eliminar a los usuarios inactivos'
+            });
+        });
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

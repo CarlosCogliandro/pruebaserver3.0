@@ -8,11 +8,9 @@ const login = async () => {
       headers: { "Content-type": "application/json; charset=UTF-8" },
       body: JSON.stringify({ email: email, password: password }),
     });
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
     const data = await response.json();
     if (data.status === "success") {
       window.location.href = data.redirect;
@@ -21,4 +19,5 @@ const login = async () => {
     console.log("Hubo un problema con la operación, usuario o contraseña incorrectos", error);
   }
 };
+
 document.getElementById("btnLogIn").onclick = login;

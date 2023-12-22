@@ -1,19 +1,18 @@
 import { isValidPassword, createHash } from "../../middleware/bcrypt.js";
-import usersModel from "./models/user.model.js";
-import GetUserDTO from "../DTO/user.dto.js";
+import userModel from "./models/user.model.js";
+import GetUserDTO from "../DTO/getUser.dto.js";
 import mongoose from "mongoose";
 
 class UserContainer {
-
   async register({ first_name, last_name, email, avatar, age, phone, address, password, rol, cart, last_connection }) {
     try {
-      const existingUser = await usersModel.findOne({ email });
+      const existingUser = await userModel.findOne({ email });
       if (existingUser) {
         console.log("User already exists");
         return null;
       }
       const hashedPassword = createHash(password);
-      const user = await usersModel.create({
+      const user = await userModel.create({
         _id: new mongoose.Types.ObjectId(),
         first_name,
         last_name,
@@ -37,7 +36,7 @@ class UserContainer {
 
   async login(user, pass) {
     try {
-      const userLogged = await usersModel.findOne({ email: user });
+      const userLogged = await userModel.findOne({ email: user });
       if (userLogged && isValidPassword(userLogged, pass)) {
         const rol = userLogged.email === "carloscogliandro22@gmail.com" ? "admin" : "user";
         return userLogged;
@@ -51,7 +50,7 @@ class UserContainer {
 
   async restorePassword(email, hashedPassword) {
     try {
-      const user = await usersModel.findOne({ email });
+      const user = await userModel.findOne({ email });
       if (!user) {
         console.log("Usuario no encontrado.");
         return false;
@@ -67,15 +66,14 @@ class UserContainer {
   };
 
   async getUsers() {
-    return await usersModel.find().lean();
+    return await userModel.find().lean();
   };
 
   async findUser(user) {
     try {
-      const searched = await usersModel.findOne({ email: user });
+      const searched = await userModel.findOne({ email: user });
       if (searched) {
-        const role =
-          searched.email === "carloscogliandro22@gmail.com" ? "admin" : "user";
+        const rol = searched.email === "admin@admin.com" ? "admin" : "user";
         return searched;
       }
       return null;
@@ -87,37 +85,25 @@ class UserContainer {
 
   async deleteUser(uid) {
     try {
-      const user = await usersModel.findOne({ email: uid }).lean();
+      const user = await userModel.findOne({ email: uid }).lean();
       console.log(email)
       console.log("//////DAO//////");
       console.log("UID");
       console.log(uid);
       console.log("user");
       console.log(user);
-      await usersModel.deleteOne({ email: uid });
+      await userModel.deleteOne({ email: uid });
       const userDTO = new GetUserDTO(user);
       return userDTO;
     } catch (error) {
-      console.warn(); (`Error deleting user: ${error}`);
-    };
-  };
-
-  async searchLastConnection(days) {
-    try {
-      const usersLastConnection = await usersModel.findOne({ last_connection: { $lt: new Date(Date.now() - (days * 24 * 60 * 60 * 1000)) } });
-      await usersModel.deleteMany({ last_connection: { $lt: new Date(Date.now() - (days * 24 * 60 * 60 * 1000)) } });
-      const inactiveUsersDTO = usersLastConnection.map(user => new GetUserDTO(user));
-      return inactiveUsersDTO;
-    } catch (error) {
-      console.error('Error al encontrar la ultima conexion:', error);
-      return false;
+      console.log(); (`Error deleting user: ${error}`);
     };
   };
 
   async updateUser(userId, userToReplace) {
     const filter = { email: userId }
     const update = { $set: userToReplace };
-    const result = await usersModel.updateOne(filter, update);
+    const result = await userModel.updateOne(filter, update);
     return result;
   };
 
@@ -131,7 +117,7 @@ class UserContainer {
   };
 
   async findOne(email) {
-    const result = await usersModel.findOne({ email }).lean();
+    const result = await userModel.findOne({ email }).lean();
     return result;
   };
 

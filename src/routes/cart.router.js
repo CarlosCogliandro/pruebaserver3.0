@@ -1,7 +1,7 @@
 import { Router } from "express";
 import cartController from "../controllers/cart.controller.js";
 import { authorization, passportCall } from "../middleware/passAuth.js";
-import usersModel from "../dao/mongoDB/models/user.model.js";
+import userModel from "../dao/mongoDB/models/user.model.js";
 
 const router = Router();
 
@@ -27,7 +27,7 @@ router.post("/:cid/purchase", (req, res, next) => {
 router.get("/usuario/carrito", passportCall('jwt'), authorization(['user']), async (req, res) => {
   try {
     const userId = req.user._id;
-    const user = await usersModel.findById(userId);
+    const user = await userModel.findById(userId);
     if (!user || !user.cart) { return res.status(404).json({ error: "Carrito no encontrado" }); }
     return res.json({ id: user.cart });
   } catch (error) {

@@ -8,6 +8,9 @@ export const transporter = nodemailer.createTransport({
     auth: {
         user: GMAIL_ACCOUNT_NODEMAILER,
         pass: GMAIL_PASS_NODEMAILER
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
@@ -25,6 +28,16 @@ const mailOptions = {
     subject: 'Correo de prueba',
     html: `<div><h1>Esto es un Test de envio de Correos por medio de Nodemailer!</h1></div>`,
     attachments: []
+};
+
+const mailOptionsDelete = (reciver, title, message) => {
+    return {
+        from: "Tuyen " + GMAIL_ACCOUNT_NODEMAILER,
+        to: reciver,
+        subject: title ? title : "Correo para usuarios eliminados.",
+        html: message ? message : "<div><h1>Se elimino tu cuenta por inactividad</h1></div>",
+        attachments: [],
+    }
 };
 
 const mailOptionsWithAttachments = {
@@ -97,5 +110,20 @@ export const sendEmailForDeletedUsers = (email, message, title, callback) => {
         });
     } catch (error) {
         console.log(error);
+    };
+};
+
+export const sendEmailDelete = (req, res) => {
+    try {
+        const { email } = req.user;
+        const { message, title } = req.body;
+        sendEmail(email, message, title, (error, info) => {
+            if (error) { res.status(400).send({ message: "Error", payload: error }); };
+            console.log(`Message sent: %s ${info.messageId}`);
+            res.send({ message: "Success!", payload: info });
+        });
+    } catch (error) {
+        console.log(`Send email error:  ${error} `);
+        res.status(500).send({ error: error, message: "Could not send email from:" + GMAIL_ACCOUNT_NODEMAILER });
     };
 };

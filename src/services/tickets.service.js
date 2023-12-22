@@ -31,10 +31,18 @@ class TicketService {
     return this.ticketContainer.createTicket({ amount: total, purchaser: purchaser });
   };
 
-  async getTicketById(tid) {
-    if (!tid) throw new Error('Ticket ID is required.');
-    const tickets = await this.ticketContainer.getTicketById(tid);
-    return tickets;
+  async getTicketById(ticketId) {
+    try {
+      const tickets = await ticketModel.findById(ticketId);
+      if (!tickets) {
+        console.error("El ticket seleccionado no pudo ser encontrado");
+        return null;
+      }
+      return tickets;
+    } catch (error) {
+      console.error("Error al buscar el ticket por su ID");
+      throw error;
+    };
   };
 };
 

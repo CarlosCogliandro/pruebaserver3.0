@@ -7,7 +7,6 @@ class UserDTO {
     this.email = user.email;
     this.rol = user.rol;
     this.age = user.age;
-    this.last_connection = user.last_connection
   };
 };
 

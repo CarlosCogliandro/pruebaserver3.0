@@ -1,55 +1,102 @@
 <header class="header">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="width: 100%; height: ;">
-        <div class="container-fluid ">
-          <a class="navbar-brand" href="/"><img src="../public//images/tuyen.png" alt="logo" style="height: 50px;"></a>
-          <div class="navbar-collapse">
-            <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;"></ul>
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/realtimeProducts">Formulario</a>
-              </li>
+  <nav
+    class="navbar navbar-expand-lg bg-body-tertiary"
+    style="width: 100%; height: ;"
+  >
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/"><img
+          src="../public//images/tuyen.png"
+          alt="logo"
+          style="height: 50px;"
+        /></a>
+      <div class="navbar-collapse">
+        <ul
+          class="navbar-nav me-auto my-2 my-lg-0"
+          style="--bs-scroll-height: 100px;"
+        ></ul>
+        <ul class="nav nav-tabs">
           <li class="nav-item">
-                <a class="nav-link active" href="/chat">Chat</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/products">Productos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/profile">Perfil</a>
-              </li>
-              {{!-- <li>
-                <button id="cartButton">🛒</button>
-              </li> --}}
-            </ul>
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/realtimeProducts">Formulario</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/chat">Chat</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/products">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/profile">Perfil</a>
+          </li>
+          <li class="nav-item">
+                        <a class="nav-link active" href="/usermanagment">Manager de usuarios</a>
+                     </li> 
+          <li>
+            <button id="cartButton"><a href="/carts">🛒</a></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<h1>Carrito</h1>
+
+<div class="container mt-100 row">
+      {{#each products}}
+        <div class="col-md-4 col-sm-6">
+          <div style="min-height: 500px;" class="container card mb-30">
+            <div class="card-img-tiles">
+              <div class="inner" style="display: flex; justify-content: center;">
+                <div class="main-img"><img style="height: 200px; width: auto;" src={{this.product.thumbnail}} alt="" /></div>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <h4 class="card-title">{{this.product.title}}</h4>
+              <p class="text-muted">${{this.product.price}}</p>
+              <h5 class="text-muted">Cantidad: {{this.quantity}}</h5>
+              <button class="btn btn-primary btn-large" onclick="eliminarProductoDelCarrito('{{this.product._id}}')">Eliminar</button>
+            </div>
           </div>
         </div>
-      </nav>
-  </header>
-<h1>Carrito</h1>
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table">
-  {{#each products}}
- <tr>
-    <td>
-      <a href="/products/{{this._id}}" class="text-decoration-none">
-      <img src="{{this.product.thumbnail}}" alt="{{this.product.title}}" class="img-fluid">
-      </a>
-      </td>
-      <td>
-    {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}
-   
-  {{/each}}
-  <div class="color1">
-    <button onclick="realizarCompra()" class="btn btn-primary btn-large">Realizar Compra</button>
-  </div>
+      {{/each}}
+    </div>
+
+        <br>
+               <div class="color1"> 
+          <button id="payment" class="btn btn-primary btn-large">Realizar pago</button>
+                </div>
       </table>
     </div>
   </div>
 </div>
 
+<script>
+   document.addEventListener("DOMContentLoaded", ()=>{
+    const paymentButton = document.getElementById("payment");
+    if(paymentButton){
+      paymentButton.addEventListener("click", async ()=>{
+        const cartId = await getCartID();
+        if(!cartId){
+          console.error("ID incorrecto");
+          return
+        }
+        const response = await fetch("/payment/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({cartId:cartId})
+        });
+        const data = await response.json();
+        if(response.ok){
+          window.location.href=data.url;
+        } else {
+          console.error("Error al iniciar la sesion de pago.");
+        }
+      });
+    }
+   });
+</script>
+
 <script src="../public/js/cart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
